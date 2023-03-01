@@ -1,46 +1,37 @@
-import React, { useState } from "react";
-import { v4 as uuid } from "uuid";
+import { useState } from "react";
 
-function ItemForm(props) {
-  const [itemName, setItemName] = useState("");
-  const [itemCategory, setItemCategory] = useState("Produce");
+function ItemForm({ onItemFormSubmit }) {
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("");
 
-  const handleNameChange = (event) => {
-    setItemName(event.target.value);
-  };
-
-  const handleCategoryChange = (event) => {
-    setItemCategory(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  function handleSubmit(e) {
+    e.preventDefault();
     const newItem = {
-      id: uuid(),
-      name: itemName,
-      category: itemCategory,
+      id: Date.now().toString(),
+      name,
+      category,
     };
-    props.onItemFormSubmit(newItem);
-    setItemName("");
-    setItemCategory("Produce");
-  };
+    onItemFormSubmit(newItem);
+    setName("");
+    setCategory("");
+  }
 
   return (
-    <form className="NewItem" onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input type="text" name="name" value={itemName} onChange={handleNameChange} />
-      </label>
-
-      <label>
-        Category:
-        <select name="category" value={itemCategory} onChange={handleCategoryChange}>
-          <option value="Produce">Produce</option>
-          <option value="Dairy">Dairy</option>
-          <option value="Dessert">Dessert</option>
-        </select>
-      </label>
-
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="name-input">Name:</label>
+      <input
+        id="name-input"
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <label htmlFor="category-input">Category:</label>
+      <input
+        id="category-input"
+        type="text"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+      />
       <button type="submit">Add to List</button>
     </form>
   );
